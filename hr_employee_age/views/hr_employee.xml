@@ -6,6 +6,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='birthday']" position="after">
                 <field name="age"/>
+		<field name="complete_age"/>
             </xpath>
         </field>
     </record>

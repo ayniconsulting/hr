@@ -30,14 +30,26 @@ class HrEmployee(models.Model):
         readonly=True,
         compute='_compute_age'
     )
+    complete_age = fields.Char(
+        string='Edad Completa',
+        readonly=True,
+        compute='_compute_age'
+    )
 
     @api.multi
     @api.depends('birthday')
     def _compute_age(self):
         for record in self:
             if record.birthday:
-                record.age = relativedelta(
+                resultado = relativedelta(
                     fields.Date.from_string(fields.Date.today()),
-                    fields.Date.from_string(record.birthday)).years
+                    fields.Date.from_string(record.birthday))
+                record.age = resultado.years
+                record.complete_age = '{years} A {months} M {days} D'.format(
+                    years=resultado.years,
+                    months=resultado.months,
+                    days=resultado.days
+                )
             else:
                 record.age = 0
+                record.complete_age = '*'
